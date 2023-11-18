@@ -1,0 +1,14 @@
+{
+  "name": "nature_tours",
+  "version": "1.0.0",
+  "description": "A project based on node.js, express.js and MongoDB.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jiawen Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
