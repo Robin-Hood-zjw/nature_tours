@@ -1,9 +1,9 @@
 /* eslint-disable import/newline-after-import */
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const app = require('./app');
 
 dotenv.config({ path: './conflg.env' });
+const app = require('./app');
 
 const path = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -16,9 +16,8 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then((con) => {
-    console.log(con.connections);
-    console.log('DB connections successfull');
+  .then(() => {
+    console.log('DB connections successful!');
   });
 
 const port = process.env.PORT || 8000;
