@@ -10,15 +10,18 @@ const path = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD,
 );
 
+console.log(`the path: ${path}`);
+
 mongoose
   .connect(path, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log('DB connections successful!');
   });
 
-const port = process.env.PORT || 8000;
-app.listen(port, () => console.log(`App running port ${port}...`));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`App running port ${port}...\n`));
