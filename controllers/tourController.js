@@ -17,8 +17,8 @@ exports.getTour = async (req, res) => {
     // Tour.findOne({ _id: req.params.id });
 
     res.status(200).json({ status: 'success', data: { tour } });
-  } catch (err) {
-    res.status(404).json({ status: 'fail', message: err });
+  } catch (error) {
+    res.status(404).json({ status: 'fail', message: error });
   }
 };
 
