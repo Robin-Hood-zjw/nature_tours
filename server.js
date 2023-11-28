@@ -10,8 +10,6 @@ const path = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD,
 );
 
-console.log(`the path: ${path}`);
-
 mongoose
   .connect(path, {
     useNewUrlParser: true,
