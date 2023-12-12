@@ -1,38 +1,48 @@
 const mongoose = require('mongoose');
 
-const tourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    unique: true,
-    required: [true, 'A tour must have a name'],
+const tourSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      unique: true,
+      required: [true, 'A tour must have a name'],
+    },
+    slug: String,
+    duration: { type: Number, required: [true, 'A tour must have a duration'] },
+    maxGroupSize: {
+      type: Number,
+      required: [true, 'A tour must have a group size'],
+    },
+    difficulty: {
+      type: String,
+      required: [true, 'A tour must have a difficulty'],
+    },
+    ratingAverage: { type: Number, default: 4.5 },
+    ratingQuantity: { type: Number, default: 0 },
+    price: { type: Number, required: [true, 'A tour must have a price'] },
+    priceDiscount: Number,
+    summary: {
+      type: String,
+      trim: true,
+      required: [true, 'A tour must have a description'],
+    },
+    decription: { type: String, trim: true },
+    imageCover: {
+      type: String,
+      required: [true, 'A tour must have a cover image'],
+    },
+    images: [String],
+    createdAt: { type: Date, default: Date.now() },
+    startDates: [Date],
   },
-  slug: String,
-  duration: { type: Number, required: [true, 'A tour must have a duration'] },
-  maxGroupSize: {
-    type: Number,
-    required: [true, 'A tour must have a group size'],
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
-  difficulty: {
-    type: String,
-    required: [true, 'A tour must have a difficulty'],
-  },
-  ratingAverage: { type: Number, default: 4.5 },
-  ratingQuantity: { type: Number, default: 0 },
-  price: { type: Number, required: [true, 'A tour must have a price'] },
-  priceDiscount: Number,
-  summary: {
-    type: String,
-    trim: true,
-    required: [true, 'A tour must have a description'],
-  },
-  decription: { type: String, trim: true },
-  imageCover: {
-    type: String,
-    required: [true, 'A tour must have a cover image'],
-  },
-  images: [String],
-  createdAt: { type: Date, default: Date.now() },
-  startDates: [Date],
+);
+
+tourSchema.virtual('durationWeeks').get(function () {
+  return this.duration / 7;
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
