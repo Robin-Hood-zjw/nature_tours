@@ -6,9 +6,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: [true, 'A user must have a name'],
-    maxlength: [20, 'A user must have less or equal than 40 characters.'],
-    minlength: [10, 'A user must have more or equal than 10 characters.'],
-    // validate: [validator.isAlpha, 'Tour name must only contain characters']
   },
   email: {
     type: String,
@@ -20,13 +17,19 @@ const userSchema = new mongoose.Schema({
   photo: String,
   password: {
     type: String,
-    unique: true,
     minlength: 8,
-    required: [true, 'Please provide your password.'],
+    required: [true, 'Please provide a password'],
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm your password.'],
+    required: [true, 'Please confirm your password'],
+    validate: {
+      // This only works on CREATE and SAVE!!!
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Passwords are not the same!',
+    },
   },
 });
 
