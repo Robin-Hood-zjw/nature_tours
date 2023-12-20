@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -31,6 +32,12 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!',
     },
   },
+});
+
+userSchema.pre('save', function (next) {
+  if (this.isModified('password')) return next();
+
+  this.password = bcrypt.hash(this.password, 12);
 });
 
 const User = mongoose.model('User', userSchema);
