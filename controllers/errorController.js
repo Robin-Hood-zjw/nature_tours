@@ -45,24 +45,6 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-// module.exports = (err, req, res, next) => {
-//   err.status = err.status || 'error';
-//   err.statusCode = err.statusCode || 500;
-
-//   if (process.env.NODE_ENV === 'development') {
-//     sendErrorDev(err, res);
-//   } else if (process.env.NODE_ENV === 'production') {
-//     let error = { ...err };
-
-//     console.log('\nI am in a production mode\n\n', err, '\n\n');
-
-//     if (err.message.name === 'CastError') error = handleCastErrorDB(error);
-//     if (err.code === 11000) error = handleDuplicateFieldsDB(error);
-
-//     sendErrorProd(err, res);
-//   }
-// };
-
 module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
   err.statusCode = err.statusCode || 500;
@@ -70,7 +52,7 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
-    let error = { ...err };
+    let error = Object.create(err);
     error.message = err.message;
 
     if (error.message.split(' ')[0] === 'CastError')
