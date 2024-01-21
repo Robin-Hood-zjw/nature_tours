@@ -63,5 +63,11 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('The user belonging to this token does not exists.', 401),
     );
 
+  if (freshUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User recently changed password! Please log in again.', 401),
+    );
+  }
+
   next();
 });
