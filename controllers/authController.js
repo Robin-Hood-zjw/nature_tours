@@ -4,8 +4,8 @@ const { promisify } = require('util');
 
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
 const sendEmail = require('../utils/catchAsync');
+const catchAsync = require('../utils/catchAsync');
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -85,7 +85,26 @@ exports.restrictTo =
     next();
   };
 
-exports.resetPassword = (req, res, next) => {};
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto.createHash('sha256').update(req.params.token);
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) return next(new AppError('Token is invalid or has expired', 400));
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  const token = signToken(user._id);
+  res.status(200).json({ status: 'success', token });
+});
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
@@ -99,9 +118,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const host = req.get('host');
     const resetURL = `${req.protocol}://${host}/api/v1/users/resetPassword/${resetToken}`;
     const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forgot your password, please ignore this email.`;
+
     await sendEmail({
       email: user.email,
-      subject: 'Your email reset token (valid for 10 min)',
+      subject: 'Your password reset token (valid for 10 min)',
       message,
     });
 
