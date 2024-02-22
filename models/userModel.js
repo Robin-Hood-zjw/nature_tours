@@ -7,6 +7,7 @@ const validator = require('validator');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: false,
     required: [true, 'A user must have a name'],
   },
   email: {
@@ -66,6 +67,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
       10,
     );
     console.log(changedTimestamp, JWTTimestamp);
+
     return JWTTimestamp < changedTimestamp;
   }
 
