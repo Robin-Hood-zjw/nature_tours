@@ -25,17 +25,15 @@ const server = app.listen(port, () =>
 );
 
 process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION! SHUTTING DOWN...');
+  console.log('\nUNHANDLED REJECTION! SHUTTING DOWN...');
   console.log(err.name, err.message);
-  process.close(() => {
-    process.exit(1);
-  });
+
+  process.close(() => process.exit(1));
 });
 
 process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! Shutting down...');
+  console.log('\nUNCAUGHT EXCEPTION! Shutting down...');
   console.log(err);
-  server.close(() => {
-    process.exit(1);
-  });
+
+  server.close(() => process.exit(1));
 });
