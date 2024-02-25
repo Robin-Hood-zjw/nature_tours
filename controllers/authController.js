@@ -1,6 +1,6 @@
 const crypto = require('crypto');
-const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 
 const User = require('../models/userModel');
 const sendEmail = require('../utils/email');
@@ -28,13 +28,7 @@ const createSendToken = (user, statusCode, res) => {
   // Remove password from output
   user.password = undefined;
 
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
+  res.status(statusCode).json({ status: 'success', token, data: { user } });
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
