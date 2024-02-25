@@ -4,8 +4,15 @@ const handleCastErrorDB = (err) =>
   new AppError(`Invalid ${err.message.path}: ${err.message.value}`, 400);
 
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  const message = `Duplicate field value: ${value}. Please use another value!`;
+  // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  // const field = Object.keys(err.keyValue)[0];
+  // const value = err.keyValue[field];
+  // const message = `Duplicate field value: ${value}. Please use another value!`;
+
+  const keys = Object.keys(err.keyPattern);
+  const message = `Duplicate FIeld Value : ${
+    err.keyValue[keys[0]]
+  } , Please Use another Value for ${keys[0]}`;
 
   return new AppError(message, 400);
 };
